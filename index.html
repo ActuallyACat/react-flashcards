@@ -51,21 +51,35 @@
               <a 
               href="javascript:;"
               role="button"
-              className={ (this.props.className || '') + ' btn' }> {this.props.children} </a>
+              className={ (this.props.className || '') + ' btn' }> 
+                {this.props.children} 
+              </a>
           );
         }
       });
 
       var FlashCard = React.createClass({
+        getInitialState: function() {
+          return { 
+            showFront:this.props.showFront,
+            card:this.props.card
+          };
+        },
+        handleFlashCardButtonClick: function() {
+          this.setState({showFront: !this.state.showFront});
+        },
         render: function() {
+          var cardBody = this.state.showFront ? this.props.card.question : this.props.card.answer;
+          var cardButton = "Show the " + (this.props.showFront ? 'answer' : 'question');
+
           return (
             <div className="panel panel-default flashcard-max">
               <div className="panel-body">
-                { this.props.question }
+                { cardBody }
               </div>    
-              <div className="panel-footer">   
+              <div className="panel-footer" onClick={this.handleFlashCardButtonClick} >   
                 <FlashCardButton className="flash-card-btn"> 
-                  Show answer
+                  { cardButton }
                 </FlashCardButton>
               </div>
             </div> 
@@ -75,13 +89,32 @@
 
       var FlashCardList = React.createClass({
         getInitialState: function() {
-          return { question: 'aadsdsa sad', text: ''};
+          return { 
+            index: 0,
+            cardList: flashCardQuestions.flashCard,
+            showFront: true
+          };
+        },
+        handleNextCardButtonClick: function() {
+          if (this.state.index <= this.state.cardList.length-2) {
+            this.setState({index: ++this.state.index});
+            this.setState({showFront: true});
+          }
         },
         render: function() {
-          return (
-            <FlashCard question={this.state.question}> 
+          var cardIndex = this.state.index;
+          var card = this.state.cardList[cardIndex];
 
-            </FlashCard>
+          return (
+            <div className="flash-card-wrapper">
+              <FlashCard card={this.state.cardList[cardIndex]} showFront={this.state.showFront}/>
+              <a 
+              href="javascript:;"
+              role="button"
+              onClick={this.handleNextCardButtonClick}>
+                Next card
+              </a>
+            </div>
           );
         }
       });
