@@ -41,7 +41,18 @@
             "question": "What is the capital of Czech Republic ?",
             "answer": "Prague",
             "isCorrect": "false"
-          }
+          },
+          {
+            "question": "What is the capital of Australia?",
+            "answer": "Canberra",
+            "isCorrect": "false"
+          },
+          {
+            "question": "How Tall is mount Everest?",
+            "answer": "8,848 m",
+            "isCorrect": "false"
+          },
+
         ]
       };
 
@@ -49,10 +60,10 @@
         render: function() {
           return (
               <a 
-              href="javascript:;"
-              role="button"
-              className={ (this.props.className || '') + ' btn' }> 
-                {this.props.children} 
+              href = "javascript:;"
+              role = "button"
+              className = { (this.props.className || '') + ' btn' }> 
+                { this.props.children } 
               </a>
           );
         }
@@ -61,23 +72,26 @@
       var FlashCard = React.createClass({
         getInitialState: function() {
           return { 
-            showFront:this.props.showFront,
-            card:this.props.card
+            showFront: true,
+            card: this.props.card
           };
         },
         handleFlashCardButtonClick: function() {
           this.setState({showFront: !this.state.showFront});
         },
+        componentWillReceiveProps: function(nextProps) {
+          this.setState({ showFront: true });
+        },
         render: function() {
-          var cardBody = this.state.showFront ? this.props.card.question : this.props.card.answer;
-          var cardButton = "Show the " + (this.props.showFront ? 'answer' : 'question');
+          var cardBody   = this.state.showFront ? this.props.card.question : this.props.card.answer;
+          var cardButton = "Show the " + (this.state.showFront ? 'answer' : 'question');
 
           return (
-            <div className="panel panel-default flashcard-max">
-              <div className="panel-body">
+            <div className = "panel panel-default flashcard-max">
+              <div className = "panel-body">
                 { cardBody }
               </div>    
-              <div className="panel-footer" onClick={this.handleFlashCardButtonClick} >   
+              <div className = "panel-footer" onClick = {this.handleFlashCardButtonClick} >   
                 <FlashCardButton className="flash-card-btn"> 
                   { cardButton }
                 </FlashCardButton>
@@ -91,33 +105,56 @@
         getInitialState: function() {
           return { 
             index: 0,
-            cardList: flashCardQuestions.flashCard,
-            showFront: true
+            cardList: flashCardQuestions.flashCard 
           };
         },
         handleNextCardButtonClick: function() {
-          if (this.state.index <= this.state.cardList.length-2) {
-            this.setState({index: ++this.state.index});
-            this.setState({showFront: true});
+          if (this.state.index <= this.state.cardList.length - 2) {
+            this.setState({ index: ++this.state.index });
+          }
+        },
+        handlePrevCardButtonClick: function() {
+          if (this.state.index > 0) {
+            this.setState({ index: --this.state.index });
           }
         },
         render: function() {
-          var cardIndex = this.state.index;
-          var card = this.state.cardList[cardIndex];
+          var cardIndex = this.state.index + 1;
+          var cardCount = this.state.cardList.length;
+          var card      = this.state.cardList[cardIndex - 1];
+          
+          var showPrev  = cardIndex !== 1;
+          var showNext  = cardIndex !== cardCount;
 
           return (
-            <div className="flash-card-wrapper">
-              <FlashCard card={this.state.cardList[cardIndex]} showFront={this.state.showFront}/>
-              <a 
-              href="javascript:;"
-              role="button"
-              onClick={this.handleNextCardButtonClick}>
-                Next card
-              </a>
+            <div className = "flash-card-wrapper">
+              <div className = "pull-right">
+                <p>{ cardIndex } / { cardCount }</p>
+              </div>
+              <FlashCard card = { card } />
+              <div className = "pull-left">
+                <a 
+                className = { !showPrev ? 'hidden' : '' } 
+                href = "javascript:;"
+                role = "button"
+                onClick = { this.handlePrevCardButtonClick }>
+                  Previous card
+                </a>
+              </div>
+              <div className = "pull-right">
+                <a 
+                className = { !showNext ? 'hidden' : '' } 
+                href = "javascript:;"
+                role = "button"
+                onClick = { this.handleNextCardButtonClick }>
+                  Next card
+                </a>
+              </div>
             </div>
           );
         }
       });
+
 
       ReactDOM.render(<FlashCardList />, document.getElementById('flash-card'));
 

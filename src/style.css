@@ -11,12 +11,14 @@
   margin-right:-4px;
 }
 .col-min { 
-  min-width: 320px;
+  min-width: 400px;
 }
-
 #flash-card .panel-footer {
   padding: 0;
 }
 .flash-card-btn { 
   width: 100%;
+}
+.hidden { 
+	display: none;
 }
