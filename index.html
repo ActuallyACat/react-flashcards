@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="src/style.css" type="text/css" />
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row row-centered">
+        <div class="col-xs-6 col-centered col-min">
+
+          <div id="flash-card"> </div>
+
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+
+    <script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/babel">
+
+      var flashCardQuestions = 
+      {
+        "flashCard": [
+          {
+            "question": "What is the capital of Germany?",
+            "answer": "Berlin",
+            "isCorrect": "false"
+          },
+          {
+            "question": "What country is Venice in?",
+            "answer": "Italy",
+            "isCorrect": "false"
+          },
+          {
+            "question": "What is the capital of Czech Republic ?",
+            "answer": "Prague",
+            "isCorrect": "false"
+          }
+        ]
+      };
+
+      var FlashCardButton = React.createClass({
+        render: function() {
+          return (
+              <a 
+              href="javascript:;"
+              role="button"
+              className={ (this.props.className || '') + ' btn' }> {this.props.children} </a>
+          );
+        }
+      });
+
+      var FlashCard = React.createClass({
+        render: function() {
+          return (
+            <div className="panel panel-default flashcard-max">
+              <div className="panel-body">
+                { this.props.question }
+              </div>    
+              <div className="panel-footer">   
+                <FlashCardButton className="flash-card-btn"> 
+                  Show answer
+                </FlashCardButton>
+              </div>
+            </div> 
+          );
+        }
+      });
+
+      var FlashCardList = React.createClass({
+        getInitialState: function() {
+          return { question: 'aadsdsa sad', text: ''};
+        },
+        render: function() {
+          return (
+            <FlashCard question={this.state.question}> 
+
+            </FlashCard>
+          );
+        }
+      });
+
+      ReactDOM.render(<FlashCardList />, document.getElementById('flash-card'));
+
+    </script>
+
+  </body>
+</html>
